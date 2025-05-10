@@ -1,16 +1,16 @@
-// @name         天鳳牌理好形表示
-// @name:zh      天凤牌理好形表示
-// @name:zh-CN   天凤牌理好形表示
-// @name:zh-TW   天鳳牌理好形表示
-// @name:en      Tenhou-Pairi Kokei display
-// @namespace    http://tanimodori.com/
+// @name         天鳳牌理好形
+// @name:zh      天凤牌理好形
+// @name:zh-CN   天凤牌理好形
+// @name:zh-TW   天鳳牌理好形
+// @name:en      Tenhou-Pairi
+// @namespace    http://sigaer.com/
 // @version      0.1.0
-// @description  天鳳牌理で一向聴の好形率を表示する
+// @description  天鳳牌理で二向聴の好形率を表示する
 // @description:zh  在天凤牌理中显示好形率
 // @description:zh-CN  在天凤牌理中显示好形率
 // @description:zh-TW  在天鳳牌理中顯示好形率
 // @description:en  Display Kokei percentage of ii-shan-ten in Tenhou-Pairi
-// @author       Tanimodori
+// @author       sigaer
 // @match        http://tenhou.net/2/*
 // @match        https://tenhou.net/2/*
 // @include      http://tenhou.net/2/*
