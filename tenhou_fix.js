@@ -1,16 +1,17 @@
-// @name         天鳳牌理好形
-// @name:zh      天凤牌理好形
-// @name:zh-CN   天凤牌理好形
-// @name:zh-TW   天鳳牌理好形
-// @name:en      Tenhou-Pairi
-// @namespace    http://sigaer.com/
+// ==UserScript==
+// @name         天鳳牌理好形表示
+// @name:zh      天凤牌理好形表示
+// @name:zh-CN   天凤牌理好形表示
+// @name:zh-TW   天鳳牌理好形表示
+// @name:en      Tenhou-Pairi Kokei display
+// @namespace    http://tanimodori.com/
 // @version      0.1.0
-// @description  天鳳牌理で二向聴の好形率を表示する
+// @description  天鳳牌理で一向聴の好形率を表示する
 // @description:zh  在天凤牌理中显示好形率
 // @description:zh-CN  在天凤牌理中显示好形率
 // @description:zh-TW  在天鳳牌理中顯示好形率
 // @description:en  Display Kokei percentage of ii-shan-ten in Tenhou-Pairi
-// @author       sigaer
+// @author       Tanimodori
 // @match        http://tenhou.net/2/*
 // @match        https://tenhou.net/2/*
 // @include      http://tenhou.net/2/*
@@ -710,30 +711,45 @@
     };
     const getRowConfigFromHand = (hand) => {
         const tiles = [];
+
         for (const child of hand.children) {
             let tileType = null;
+            let koukeiRate = null;
+
             if (hand.shanten === 1) {
                 tileType = isKoukei(child) ? "koukei" : "gukei";
             } else if (hand.shanten === 2) {
-                const maxRate = getMaxKoukeiRateForDiscard(child); // 👈 计算该切牌的最大好形率
-                tileType = maxRate > 0.5 ? "koukei" : "gukei"; // 可调阈值
-                tileConfig.koukeiRate = maxRate;              // 👈 保存下来，后面表格中可展示
+                const maxRate = getMaxKoukeiRateForDiscard(child); // 获取该打牌后最优好形率
+                tileType = maxRate > 0.5 ? "koukei" : "gukei"; // 阈值可自定义（如0.5即50%）
+                koukeiRate = maxRate;
             }
 
             const tileConfig = {
                 type: tileType,
                 tile: child.parent.tile,
                 count: child.parent.tileCount,
-                url: getHandUrl(child)
+                url: getHandUrl(child),
             };
+
+            if (koukeiRate !== null) {
+                tileConfig.koukeiRate = koukeiRate; // 注入好形率到config中，用于UI展示
+            }
+
+            // 若处于 1-shanten 或 2-shanten，递归展示下一层听牌分析
             if (hand.shanten === 1 || hand.shanten === 2) {
                 const table = getTableConfigFromHand(child);
                 table.showHand = true;
                 tileConfig.child = table;
             }
+
             tiles.push(tileConfig);
         }
-        return { discard: hand.parent.tile, tiles, tenpai: hand.shanten === 0 };
+
+        return {
+            discard: hand.parent?.tile,
+            tiles,
+            tenpai: hand.shanten === 0,
+        };
     };
     const getTableConfigFromHand = (hand) => {
         const config = {
